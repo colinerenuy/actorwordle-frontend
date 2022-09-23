@@ -35,11 +35,16 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
 
         //creating the board itself
         let letterBoxs  =[]; 
-        wordLetters.map(letter => {
+        wordLetters.map((letter, i) => {
             if (letter.trim().length === 0 ) {
-                letterBoxs += '<div class = "empty-box"> </div>'
+                letterBoxs += 
+                `<div class = "empty-box"> </div>`
+                
             }
-
+            else if(wordLetters[0] === letter[i] || wordLetters[i-1].trim().length === 0) {
+                letterBoxs +=
+                `<div class = "filled-box letter-box">${wordLetters[i]}</div>`
+            }
             else {
                 letterBoxs += '<div class = "letter-box"> </div>'
             }
@@ -53,9 +58,11 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
             ${letterBoxs}
             </div>
             `
+
         }
 
         //adding the first letters of the name & surname
+        
 
         
 
