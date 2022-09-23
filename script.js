@@ -122,11 +122,11 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
 
                 if (box.className == "empty-box") {
                     console.log("space!!")
-                    row.children[nextLetter+1].textContent = pressedKey
-                    row.children[nextLetter+1].classList.add('filled-box');
+                    row.children[nextLetter+2].textContent = pressedKey
+                    row.children[nextLetter+2].classList.add('filled-box');
                     currentGuess.push(' ');
                     currentGuess.push(pressedKey);
-                    nextLetter+=2;
+                    nextLetter+=3;
                 }
                 
                 else {
@@ -178,7 +178,7 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
             if (guessString.length != rightGuess.length) {
                 console.log(rightGuess);
                 console.log(guessString);
-                console.log(wordOfTheDay)
+                console.log(wordOfTheDay);
                 document.querySelector('#result').textContent = 'Not enough letters !'
                 return
             }
