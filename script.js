@@ -9,10 +9,10 @@ let nextLetter = 0;
 
 // Get the Word of the day from the backend route
 
-        fetch('http://localhost:3000/games/new')
+        fetch('http://localhost:3000/person/popular')
         .then(response => response.json())
         .then(data => {
-            wordOfTheDay = data.word;
+            wordOfTheDay = data.actor;
         })
 
 //GENERAL CONSTANTS TO MANIPULATE WOTD
@@ -31,7 +31,6 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
         //console.logging the word of the day for debugging purposes
         console.log(wordOfTheDay)
         const wordLetters = wordOfTheDay.split('');
-        console.log(wordLetters);
 
         //creating the board itself
         let letterBoxs  =[]; 
@@ -45,6 +44,7 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
                 letterBoxs +=
                 `<div class = "filled-box letter-box">${wordLetters[i]}</div>`
             }
+
             else {
                 letterBoxs += '<div class = "letter-box"> </div>'
             }
@@ -125,12 +125,13 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
                     row.children[nextLetter+2].textContent = pressedKey
                     row.children[nextLetter+2].classList.add('filled-box');
                     currentGuess.push(' ');
-                    currentGuess.push(pressedKey);
+                    currentGuess.push(row.children[nextLetter+1].textContent, pressedKey);
                     nextLetter+=3;
                 }
                 
                 else {
                 console.log("first letter!!");
+                currentGuess.push(row.children[nextLetter].textContent);
                 row.children[nextLetter+1].textContent = pressedKey
                 row.children[nextLetter+1].classList.add('filled-box');
                 currentGuess.push(pressedKey);
@@ -166,7 +167,6 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
             let row = document.querySelectorAll(".letter-row")[6 - guessesRemaining]
             let guessString = '';
             let rightGuess = wordOfTheDay;
-            let length = wordOfTheDay.trim().length;
 
             //join the guessed letters into the guess Word
             for (const letter of currentGuess) {
@@ -176,15 +176,14 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
             //if the player presses enter without having guessed enough letters, display an alert
 
             if (guessString.length != rightGuess.length) {
-                console.log(rightGuess);
-                console.log(guessString);
-                console.log(wordOfTheDay);
+                
+
                 document.querySelector('#result').textContent = 'Not enough letters !'
                 return
             }
 
             //loop through the array of guessed letters, and assign each one the corresponding color
-            for (let i = 0 ; i < length ; i++) {
+            for (let i = 0 ; i < wordOfTheDay.length ; i++) {
                 let letterColor = ''
                 let box = row.children[i]
                 let letter = currentGuess[i]
