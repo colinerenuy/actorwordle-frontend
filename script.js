@@ -22,21 +22,29 @@ let length = wordOfTheDay.trim().length;
 //create the board when the New Game button is clicked
 
 document.querySelector('#newGame').addEventListener('click', function(e) {
-        console.log(wordOfTheDay)
+    //resetting the parameters
+        currentGuess = [];
+        nextLetter = 0;
+        guessesRemaining = NUMBER_OF_GUESSES;
         document.querySelector('#game-board').innerHTML = ''
+    
+        //console.logging the word of the day for debugging purposes
+        console.log(wordOfTheDay)
         const wordLetters = wordOfTheDay.split('');
         console.log(wordLetters);
+
+        //creating the board itself
         let letterBoxs  =[]; 
         wordLetters.map(letter => {
             if (letter.trim().length === 0 ) {
-                console.log(letter);
                 letterBoxs += '<div class = "empty-box"> </div>'
             }
+
             else {
                 letterBoxs += '<div class = "letter-box"> </div>'
             }
         })
-        
+
 
         for (let i = 0 ; i < 6 ; i ++) {
             
@@ -46,6 +54,10 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
             </div>
             `
         }
+
+        //adding the first letters of the name & surname
+
+        
 
         e.target.blur()
     }
