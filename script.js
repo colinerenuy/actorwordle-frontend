@@ -118,14 +118,25 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
             let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining]
             let box = row.children[nextLetter];
 
-            if (box.className == "empty-box") {
-                console.log("space!!")
+            if (box.className == "empty-box" || box.className == "filled-box letter-box" ) {
+
+                if (box.className == "empty-box") {
+                    console.log("space!!")
+                    row.children[nextLetter+1].textContent = pressedKey
+                    row.children[nextLetter+1].classList.add('filled-box');
+                    currentGuess.push(' ');
+                    currentGuess.push(pressedKey);
+                    nextLetter+=2;
+                }
+                
+                else {
+                console.log("first letter!!");
                 row.children[nextLetter+1].textContent = pressedKey
                 row.children[nextLetter+1].classList.add('filled-box');
-                currentGuess.push(' ');
                 currentGuess.push(pressedKey);
                 nextLetter+=2;
                 return
+                }
             }
 
             else {
