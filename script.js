@@ -1,23 +1,44 @@
-
+//GENERAL CONSTANTS TO MANIPULATE WOTD
 const NUMBER_OF_GUESSES = 6;
-let wordOfTheDay = ''
+let wordOfTheDay = '';
 let guessesRemaining = NUMBER_OF_GUESSES;
 let currentGuess = [];
 let nextLetter = 0;
 
 
+//Set a timer so that the Actor of the day is updated every day at midnight
+
+const now = new Date();
+const night = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate() + 1, // the next day, ...
+    0, 0, 0 // ...at 00:00:00 hours
+);
+const msTillMidnight = night.getTime() - now.getTime();
+
+function resetActor() {
+    wordOfTheDay = ''
+}
+
+//setTimeout("resetActor()', 3000")
 
 // Get the Word of the day from the backend route
 
-        fetch('http://localhost:3000/person/popular')
+if (!wordOfTheDay) {
+    fetch('http://localhost:3000/person/popular')
         .then(response => response.json())
         .then(data => {
-            wordOfTheDay = data.actor;
+            wordOfTheDay = data.actor.toUpperCase();
         })
+}
 
-//GENERAL CONSTANTS TO MANIPULATE WOTD
+else {
+    setTimeout("resetActor()', 3000")
+}
+    
 
-let length = wordOfTheDay.trim().length;
+
 
 //create the board when the New Game button is clicked
 
@@ -59,12 +80,7 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
             </div>
             `
 
-        }
-
-        //adding the first letters of the name & surname
-        
-
-        
+        }        
 
         e.target.blur()
     }
@@ -172,6 +188,7 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
             for (const letter of currentGuess) {
                 guessString += letter
             }
+            console.log(guessString)
 
             //if the player presses enter without having guessed enough letters, display an alert
 
