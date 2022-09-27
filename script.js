@@ -19,26 +19,28 @@ const msTillMidnight = night.getTime() - now.getTime();
 
 function resetActor() {
     wordOfTheDay = ''
+    currentGuess = [];
+    nextLetter = 0;
+    guessesRemaining = NUMBER_OF_GUESSES;
+    document.querySelector('#game-board').innerHTML = ''
 }
 
 //setTimeout("resetActor()', 3000")
 
 // Get the Word of the day from the backend route
 
-if (!wordOfTheDay) {
+function getActor() {
     fetch('http://localhost:3000/person/popular')
         .then(response => response.json())
         .then(data => {
             wordOfTheDay = data.actor.toUpperCase();
+            return wordOfTheDay;
         })
 }
 
-else {
-    setTimeout("resetActor()', 3000")
-}
+setInterval(getActor(), 3000);
+
     
-
-
 
 //create the board when the New Game button is clicked
 
@@ -63,7 +65,7 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
             }
             else if(wordLetters[0] === letter[i] || wordLetters[i-1].trim().length === 0) {
                 letterBoxs +=
-                `<div class = "filled-box letter-box">${wordLetters[i]}</div>`
+                `<div class = "filled-box letter-box first-letter">${wordLetters[i]}</div>`
             }
 
             else {
@@ -134,10 +136,9 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
             let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining]
             let box = row.children[nextLetter];
 
-            if (box.className == "empty-box" || box.className == "filled-box letter-box" ) {
+            if (box.className == "empty-box" || box.className == "filled-box letter-box first-letter" ) {
 
                 if (box.className == "empty-box") {
-                    console.log("space!!")
                     row.children[nextLetter+2].textContent = pressedKey
                     row.children[nextLetter+2].classList.add('filled-box');
                     currentGuess.push(' ');
@@ -145,10 +146,10 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
                     nextLetter+=3;
                 }
                 
-                else {
-                console.log("first letter!!");
+                else {  
+                console.log(nextLetter);
                 currentGuess.push(row.children[nextLetter].textContent);
-                row.children[nextLetter+1].textContent = pressedKey
+                row.children[nextLetter+1].textContent = pressedKey;
                 row.children[nextLetter+1].classList.add('filled-box');
                 currentGuess.push(pressedKey);
                 nextLetter+=2;
@@ -168,12 +169,38 @@ document.querySelector('#newGame').addEventListener('click', function(e) {
         // In case the user press the delete key, this function deletes the last guess
 
         function deleteLetter() {
+
             let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining]
             let box = row.children[nextLetter - 1]
-            box.textContent = ''
-            box.classList.remove('filled-box')
-            currentGuess.pop()
-            nextLetter --
+            let previousBox = row.children[nextLetter - 2];
+            console.log(nextLetter);
+            console.log(currentGuess.length);
+
+            if (currentGuess.length === 2) {
+                nextLetter --;
+                console.log("début du mot");
+                row.children[1].textContent = ''
+                currentGuess.pop()
+                return
+            }
+            
+            
+            else if (previousBox.className == "filled-box letter-box first-letter") {
+                box.textContent = ''
+                box.classList.remove('filled-box')
+                currentGuess.pop()
+                currentGuess.pop()
+                currentGuess.pop()
+                nextLetter = nextLetter -3;
+                
+            }
+            
+            else {
+                box.textContent = ''
+                box.classList.remove('filled-box')
+                currentGuess.pop()
+                nextLetter --
+            }
         }
 
         //Finally, when the user has enter enough letters and press the enter key, this function check if each letter matches the corresponding letter of the WordofTheDay, and changes the color of the box.
